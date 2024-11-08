@@ -22,8 +22,9 @@ export default function Calendar({ birthDate }) {
     const now = new Date().getTime();
 
     return {
-      isPast: weekTime < now,
+      isPast: weekTime <= now,
       date: new Date(weekTime),
+      isFuture: weekTime > now,
     };
   };
 

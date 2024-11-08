@@ -94,21 +94,23 @@ export default function WeekSquare({
   return (
     <>
       <div
-        onClick={() => !isLoading && setIsModalOpen(true)}
+        onClick={() => !isLoading && !isPast && setIsModalOpen(true)}
         onContextMenu={(e) => {
           e.preventDefault();
-          if (!isLoading) {
+          if (!isLoading && !isPast) {
             toggleCompletion();
           }
         }}
         className={`
-          relative w-6 h-6 sm:w-8 sm:h-8 border-2 rounded cursor-pointer transition-all duration-200
-          ${isPast ? "bg-gray-300" : "bg-black"}
+          relative w-6 h-6 sm:w-8 sm:h-8 border-2 rounded transition-all duration-200
+          ${isPast ? "bg-gray-300 cursor-default" : "bg-black cursor-pointer"}
           ${isCompleted ? "bg-green-500 border-green-600" : ""}
           ${
             isLoading
               ? "opacity-50 cursor-wait"
-              : "hover:border-blue-500 hover:scale-110"
+              : !isPast
+              ? "hover:border-blue-500 hover:scale-110"
+              : ""
           }
         `}
         title={tooltipText}
