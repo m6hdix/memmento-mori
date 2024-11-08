@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import WeekSquare from "./WeekSquare";
 
 export default function Calendar({ birthDate }) {
   const [weeks, setWeeks] = useState([]);
@@ -29,22 +28,20 @@ export default function Calendar({ birthDate }) {
   };
 
   return (
-    <div className="grid grid-cols-52 gap-1">
-      {[...Array(TOTAL_WEEKS)].map((_, index) => {
-        const status = calculateWeekStatus(index);
-        const weekData = weeks.find((w) => w.weekNumber === index);
-
-        return (
-          <WeekSquare
-            key={index}
-            weekNumber={index}
-            isPast={status.isPast}
-            date={status.date}
-            note={weekData?.note}
-            isCompleted={weekData?.isCompleted}
-          />
-        );
-      })}
+    <div className="calendar-container">
+      <div className="grid grid-cols-52 gap-1">
+        {Array.from({ length: TOTAL_WEEKS }).map((_, index) => {
+          const weekStatus = calculateWeekStatus(index);
+          return (
+            <WeekSquare
+              key={index}
+              isPast={weekStatus.isPast}
+              isFuture={weekStatus.isFuture}
+              date={weekStatus.date}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
