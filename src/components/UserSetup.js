@@ -60,7 +60,7 @@ export default function UserSetup({ onBirthDateSet }) {
       if (!session?.user?.email) {
         throw new Error("لطفاً دوباره وارد سیستم شوید");
       }
-
+      console.log(session?.user?.email);
       const response = await fetch("/api/user/birthdate", {
         method: "POST",
         headers: {
