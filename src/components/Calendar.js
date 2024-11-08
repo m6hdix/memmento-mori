@@ -29,8 +29,8 @@ export default function Calendar({ birthDate }) {
   };
 
   return (
-    <div className="calendar-container">
-      <div className="grid grid-cols-52 gap-1">
+    <div className="calendar-container p-4 bg-white rounded-lg shadow-lg">
+      <div className="grid grid-cols-52 gap-1 max-w-[1200px] mx-auto overflow-x-auto">
         {Array.from({ length: TOTAL_WEEKS }).map((_, index) => {
           const weekStatus = calculateWeekStatus(index);
           return (
