@@ -46,6 +46,23 @@ export async function POST(request) {
       );
     }
 
+    // First check if user exists
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
+      },
+    });
+
+    if (!existingUser) {
+      return NextResponse.json(
+        {
+          error: "کاربر یافت نشد",
+          details: "حساب کاربری شما در پایگاه داده وجود ندارد",
+        },
+        { status: 404 }
+      );
+    }
+
     const body = await request.json();
 
     // Add validation for missing birthDate
