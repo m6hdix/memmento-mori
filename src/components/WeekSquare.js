@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import { toast } from "react-hot-toast";
 
 export default function WeekSquare({
@@ -14,6 +14,7 @@ export default function WeekSquare({
   const [note, setNote] = useState(initialNote);
   const [isCompleted, setIsCompleted] = useState(initialIsCompleted);
   const [isLoading, setIsLoading] = useState(false);
+  const debounceTimer = useRef(null);
 
   const tooltipText = useMemo(() => {
     return `هفته ${weekNumber + 1}\n${date.toLocaleDateString("fa-IR")}\n${
@@ -52,13 +53,20 @@ export default function WeekSquare({
   );
 
   const handleNoteUpdate = async (newNote) => {
-    try {
-      await updateWeekData({ note: newNote, isCompleted });
-      setNote(newNote);
-      toast.success("یادداشت با موفقیت ذخیره شد");
-    } catch (error) {
-      toast.error(error.message);
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
     }
+
+    setNote(newNote);
+
+    debounceTimer.current = setTimeout(async () => {
+      try {
+        await updateWeekData({ note: newNote, isCompleted });
+        toast.success("یادداشت با موفقیت ذخیره شد");
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }, 500);
   };
 
   const toggleCompletion = async () => {
@@ -95,7 +103,7 @@ export default function WeekSquare({
         }}
         className={`
           relative w-6 h-6 sm:w-8 sm:h-8 border-2 rounded cursor-pointer transition-all duration-200
-          ${isPast ? "bg-gray-300" : "bg-white"}
+          ${isPast ? "bg-gray-300" : "bg-black"}
           ${isCompleted ? "bg-green-500 border-green-600" : ""}
           ${
             isLoading

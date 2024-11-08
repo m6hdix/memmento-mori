@@ -7,7 +7,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Memento Mori Calendar",
-  description: "یادآور گذر زمان",
+  description:
+    "یادآور گذر زمان | تقویمی برای درک بهتر ارزش زمان و زندگی. این تقویم به شما کمک می‌کند تا با نمایش تصویری گذر عمر، لحظات زندگی را با معنای بیشتری سپری کنید و برای رسیدن به اهداف‌تان برنامه‌ریزی کنید.",
 };
 
 export default function RootLayout({ children }) {
