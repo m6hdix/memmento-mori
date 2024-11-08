@@ -67,27 +67,37 @@ export async function POST(request) {
       );
     }
 
-    // بروزرسانی تاریخ تولد کاربر
-    const updatedUser = await prisma.user
-      .update({
+    // Modify the update operation to better handle Prisma errors
+    try {
+      const updatedUser = await prisma.user.update({
         where: {
           email: session.user.email,
         },
         data: {
           birthDate: birthDateObj,
         },
-      })
-      .catch((err) => {
-        console.error("Prisma update error:", err);
-        throw new Error("Database update failed");
       });
 
-    return NextResponse.json({
-      message: "تاریخ تولد با موفقیت ذخیره شد",
-      birthDate: updatedUser.birthDate,
-    });
+      return NextResponse.json({
+        message: "تاریخ تولد با موفقیت ذخیره شد",
+        birthDate: updatedUser.birthDate,
+      });
+    } catch (prismaError) {
+      console.error("Prisma update error:", {
+        code: prismaError.code,
+        message: prismaError.message,
+        meta: prismaError.meta,
+      });
+
+      return NextResponse.json(
+        {
+          error: "خطا در ذخیره تاریخ تولد",
+          details: "خطا در بروزرسانی پایگاه داده",
+        },
+        { status: 500 }
+      );
+    }
   } catch (error) {
-    // More detailed error logging
     console.error("Error updating birth date:", {
       message: error.message,
       stack: error.stack,
