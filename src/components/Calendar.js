@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import WeekSquare from "./WeekSquare";
 
 export default function Calendar({ birthDate }) {
   const [weeks, setWeeks] = useState([]);
