@@ -56,20 +56,29 @@ export default function UserSetup({ onBirthDateSet }) {
         throw new Error("تاریخ تولد نامعتبر است");
       }
 
+      // Make sure we have a valid session and user ID
+      if (!session?.user?.email) {
+        throw new Error("لطفاً دوباره وارد سیستم شوید");
+      }
+
       const response = await fetch("/api/user/birthdate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ birthDate, email: session?.user?.email }),
+        body: JSON.stringify({
+          birthDate,
+          email: session.user.email,
+          userId: session.user.id, // Add user ID to the request
+        }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(data.error || "خطا در ذخیره تاریخ تولد");
       }
 
+      const data = await response.json();
       onBirthDateSet(birthDate);
     } catch (error) {
       console.error("Error:", error);
