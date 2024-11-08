@@ -61,7 +61,7 @@ export default function UserSetup({ onBirthDateSet }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ birthDate }),
+        body: JSON.stringify({ birthDate, email: session?.user?.email }),
       });
 
       const data = await response.json();
@@ -73,7 +73,10 @@ export default function UserSetup({ onBirthDateSet }) {
       onBirthDateSet(birthDate);
     } catch (error) {
       console.error("Error:", error);
-      setError(error.message || "خطا در ذخیره تاریخ تولد");
+      setError(
+        error.message ||
+          "خطا در ذخیره تاریخ تولد. لطفاً دوباره وارد سیستم شوید."
+      );
     } finally {
       setIsLoading(false);
     }
