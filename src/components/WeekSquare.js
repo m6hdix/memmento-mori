@@ -76,10 +76,10 @@ export default function WeekSquare({
           }
         }}
         className={`
-          w-4 h-4 border rounded-sm cursor-pointer
+          w-6 h-6 sm:w-8 sm:h-8 border-2 rounded cursor-pointer transition-all duration-200
           ${isPast ? "bg-gray-300" : "bg-white"}
-          ${isCompleted ? "bg-green-500" : ""}
-          hover:border-blue-500
+          ${isCompleted ? "bg-green-500 border-green-600" : ""}
+          hover:border-blue-500 hover:scale-110
         `}
         title={`هفته ${weekNumber + 1}\n${date.toLocaleDateString("fa-IR")}\n${
           note || "بدون یادداشت"
@@ -89,33 +89,42 @@ export default function WeekSquare({
       />
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-4 rounded-lg w-80">
-            <h3 className="text-lg font-bold mb-2">
-              یادداشت هفته {weekNumber + 1}
-            </h3>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white p-4 sm:p-6 rounded-lg w-full max-w-md mx-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">
+                یادداشت هفته {weekNumber + 1}
+              </h3>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
             <textarea
               value={note || ""}
               onChange={(e) => handleNoteUpdate(e.target.value)}
-              className="border p-2 w-full rounded mb-2 min-h-[100px]"
+              className="border p-3 w-full rounded mb-4 min-h-[150px] focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="یادداشت خود را اینجا بنویسید..."
+              dir="rtl"
             />
-            <div className="flex justify-between items-center">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                بستن
-              </button>
-              <div className="flex items-center">
-                <label className="ml-2">تکمیل شده:</label>
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div className="flex items-center gap-2 order-2 sm:order-1">
                 <input
                   type="checkbox"
                   checked={isCompleted}
                   onChange={toggleCompletion}
-                  className="form-checkbox h-5 w-5 text-blue-500"
+                  className="form-checkbox h-5 w-5 text-blue-500 rounded"
                 />
+                <label>تکمیل شده</label>
               </div>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="w-full sm:w-auto bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors order-1 sm:order-2"
+              >
+                بستن
+              </button>
             </div>
           </div>
         </div>
